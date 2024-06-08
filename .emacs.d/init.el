@@ -2,8 +2,6 @@
 ;;
 ;; Author: @clflushopt
 ;;
-;; Copyright 2022.
-;;
 ;; One `init.el` to rule them all.
 
 ;; Package management made simple.

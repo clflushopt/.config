@@ -2,8 +2,6 @@
 ;;
 ;; Author: @clflushopt
 ;;
-;; Copyright 2022.
-;;
 ;; Some early initializations for startup speed and UI convenience.
 ;;
 ;; Startup speed, annoyance suppression
