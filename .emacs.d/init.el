@@ -1,4 +1,4 @@
-;;; -*- mode: emacs-lisp; coding:utf-8; fill-column: 80 -*-
+;; -*- mode: emacs-lisp; coding:utf-8; fill-column: 80 -*-
 ;;
 ;; Author: @clflushopt
 ;;
@@ -26,7 +26,7 @@
 ;;
 ;;
 ;; Theme and font.
-(load-theme 'leuven)
+(load-theme 'modus-operandi)
 
 ;; Show the buffer's filename as the frame title, no icon.
 (setq frame-title-format
@@ -54,6 +54,16 @@
 
 ;; Follow symlinks.
 (setq vc-follow-symlinks t)
+
+;; Delete sends files to the system's trash.
+(setq delete-by-moving-to-trash t)
+
+;; Disable backups, lockfiles and general littering.
+(setq make-backup-files nil)
+(setq create-lockfiles nil)
+
+;; Enable auto-saves.
+(setq auto-save-visited-mode 1)
 
 ;; Only two packages exit by default, `which-key` and `exec-shell-from-path`.
 ;;
@@ -126,23 +136,27 @@
 ;;
 ;;
 ;; Optional, but I prefer to have recursive minibuffers.
-(setopt enable-recursive-minibuffers t)
+(setq enable-recursive-minibuffers t)
 ;; Cycle candidates with `TAB~ (also `C-n` and `C-p`).
-(setopt completion-cycle-threshold 1)                  ; TAB cycles candidates
+(setq completion-cycle-threshold 1)                  ; TAB cycles candidates
 ;; Annotations, superseeded by marginalia.
-(setopt completions-detailed t)                        ; Show annotations
+(setq completions-detailed t)                        ; Show annotations
 ;; Trigger completion, then indentation when `TAB` is pushed.
-(setopt tab-always-indent 'complete)
+(setq tab-always-indent 'complete)
 ;; Enable as many as you prefer, superseeded by `orderless` later.
-(setopt completion-styles '(basic initials substring))
+(setq completion-styles '(basic initials substring))
 
 ; Open completion lazily.
-(setopt completion-auto-help 'lazy)
+(setq completion-auto-help 'lazy)
 ;; Cap completion mini-buffer size, make them details; mostly UI changes.
-(setopt completions-max-height 20)
-(setopt completions-detailed t)
-(setopt completions-format 'one-column)
-(setopt completions-group t)
+(setq completions-max-height 20)
+(setq completions-detailed t)
+(setq completions-format 'one-column)
+(setq completions-group t)
+;; Enable electric pair mode.
+(setq electric-pair-mode t)
+
+
 ;; If this is set to `t` it will switch to `completions` tab immediately
 ;; with `'second-tab` it waits for a second push on the tab key.
 (setopt completion-auto-select 'second-tab)
@@ -180,7 +194,13 @@
 
 ;; Enable LSP on certain modes by default.
 (use-package emacs
-  :hook (rust-ts-mode . eglot-ensure))
+  :hook (rust-ts-mode . eglot-ensure)
+  ;; C & C++ native modes.
+  :hook (c-mode . eglot-ensure)
+  :hook (c++mode . eglot-ensure)
+  ;; C & C++ Treesitter modes.
+  :hook (c-ts-mode . eglot-ensure)
+  :hook (c++-ts-mode . eglot-ensure))
 
 ;; Configure eglot behavior outside normal buffers.
 (use-package eglot
@@ -188,6 +208,8 @@
   (eglot-send-changes-idle-time 0.1)
   ;; Trigger eglot in referenced non-project files (`xref` buffer).
   (eglot-extend-to-xref t)
+  ;; Add `clangd` to the list of server programs for TS and non-TS modes.
+  (add-to-list 'eglot-server-programs '((c++-mode c-mode c++-ts-mode c-ts-mode) "clangd"))
 
   :config
   ;; Disable log events.
@@ -199,6 +221,16 @@
 (define-key eglot-mode-map (kbd "C-c r") 'eglot-rename)
 (define-key eglot-mode-map (kbd "C-c o") 'eglot-code-action-organize-imports)
 (define-key eglot-mode-map (kbd "C-c f") 'eglot-format-buffer)
+
+;; Diagnostic movements.
+;;
+;; Moving around diagnostics and expanding on diagnostic messages.
+(define-key prog-mode-map (kbd "C-c d p") 'flymake-goto-prev-error)
+(define-key prog-mode-map (kbd "C-c d n") 'flymake-goto-next-error)
+(define-key prog-mode-map (kbd "C-c d m") 'flymake-show-diagnostic)
+
+;; Emacs keybindings that are less annonying.
+(global-set-key (kbd "C-x f") 'find-file)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;

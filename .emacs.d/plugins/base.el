@@ -119,8 +119,10 @@
 
   :hook (corfu-mode . corfu-popupinfo-mode)
   :custom
-  (corfu-popupinfo-delay '(0.25 . 0.1))
-  (corfu-popupinfo-hide nil))
+  (corfu-cycle t)
+  (corfu-auto t))
+  ;; (corfu-popupinfo-delay '(0.25 . 0.1))
+  ;; (corfu-popupinfo-hide nil))
 
 ;; Make corfu popup come up in terminal overlay
 (use-package corfu-terminal

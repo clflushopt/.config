@@ -14,7 +14,8 @@ export PATH
 # Uncomment the following line if you don't like systemctl's auto-paging feature:
 # export SYSTEMD_PAGER=
 
-# User specific configuration
+# User specific configuration; includes global exports, history management and
+# prompts.
 #
 # Global exports.
 export LANG="en_US.UTF-8"
